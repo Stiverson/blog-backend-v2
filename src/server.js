@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const postRoutes = require('./routes/post.routes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,3 +26,4 @@ mongoose.connect(process.env.MONGO_URI)
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

@@ -1,69 +1,64 @@
 # Blog Backend API v2
 
-Este é um projeto de API para gerenciamento de posts de um Blog para o Tech challege segunda fase. A aplicação é desenvolvida com Node.js, Express e MongoDB. Está configurada para rodar localmente, via Docker e possui integração contínua (CI) com GitHub Actions.
+Este é um projeto de API para gerenciamento de posts de um Blog para o Tech Challenge segunda fase. A aplicação é desenvolvida com Node.js, Express e MongoDB. Está configurada para rodar localmente, via Docker e possui integração contínua (CI) com GitHub Actions.
+
+---
 
 ## ✅ Funcionalidades
 
 - CRUD completo de posts (`Create`, `Read`, `Update`, `Delete`)
 - Middleware global de tratamento de erros
-- Documentação Swagger em `/api-docs`
-- Suporte a variáveis de ambiente (.env)
-- Docker e Docker Compose configurados
-- GitHub Actions CI configurado para build e testes
+- Documentação Swagger disponível em `/api-docs`
+- Suporte a variáveis de ambiente via arquivo `.env`
+- Configuração pronta para Docker e Docker Compose
+- Pipeline CI configurada com GitHub Actions
 - Arquivos sensíveis ignorados via `.gitignore`
 
 ---
 
-## 🚀 Como rodar o projeto?
+##  Como rodar o projeto
 
-### 1. Clonando o repositório:
+### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/seu-usuario/seu-repositorio.git
 cd blog-backend-v2
 
-2. Configurar variáveis de ambiente:
+2. Configurar variáveis de ambiente
+Copie o arquivo exemplo para .env e edite se necessário:
 
 cp .env.example .env
 
-Edite o arquivo .env se necessário:
-
+Conteúdo padrão do .env:
 
 PORT=3000
-MONGO_URI=mongodb://mongo:27017/blog
+MONGODB_URI=mongodb://mongo:27017/blog
 
-3. Rodando com Docker (recomendado):
-É necessário ter o Docker e Docker Desktop instalados.
+3. Rodar a aplicação via Docker (recomendado)
 
-docker-compose up --build
+É necessário ter Docker e Docker Compose instalados.
 
-A API estará disponível em: http://localhost:3000/posts
+docker-compose up --build -d
 
-Swagger: http://localhost:3000/api-docs
+Para popular o banco com dados de exemplo (seed):
 
-4. Rodando sem Docker (modo local):
+docker exec -it blog-api npm run seed
+A API estará disponível em:
+http://localhost:3000/posts
+
+Swagger UI para documentação e testes:
+http://localhost:3000/api-docs
+
+4. Rodar localmente sem Docker
 
 npm install
-
 npm run dev
 
-5. Testes com GitHub Actions:
-A pipeline do GitHub Actions é automaticamente executada em todo push ou pull request para a branch main.
+5. Testes com GitHub Actions
 
-6. Endpoints da API:
-GET /posts — Listar posts
+A pipeline roda automaticamente em pushes ou pull requests na branch main.
 
-GET /posts/:id — Buscar post por ID
-
-POST /posts — Criar novo post
-
-PUT /posts/:id — Atualizar post
-
-DELETE /posts/:id — Remover post
-Documentação Swagger disponível em: /api-docs
-
-📁 Estrutura de Pastas
-bash
+📁 Estrutura de pastas
 
 blog-backend-v2/
 │
@@ -86,10 +81,9 @@ blog-backend-v2/
 │   └── errorHandler.js
 └── .github/
     └── workflows/
-        └── node.js.yml         
+        └── node.js.yml
+🔗 Tecnologias utilizadas
 
-
-🔗 Tecnologias
 Node.js
 
 Express
@@ -98,9 +92,9 @@ MongoDB
 
 Mongoose
 
-Swagger
+Swagger (OpenAPI)
 
 Docker & Docker Compose
 
-GitHub Actions
+GitHub Actions (CI/CD)
 

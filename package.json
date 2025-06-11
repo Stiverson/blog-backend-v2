@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest --coverage",
     "start": "node src/server.js",
-    "dev": "NODE_ENV=development nodemon src/server.js"
+    "dev": "NODE_ENV=development nodemon src/server.js",
+    "seed": "node seed.js"
   },
   "keywords": [],
   "author": "",

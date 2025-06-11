@@ -1,6 +1,23 @@
 const express = require('express');
+const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const Post = require('../models/Post');
+
+// Validação para criar/atualizar post
+const postValidationRules = [
+  body('title').notEmpty().withMessage('O título é obrigatório'),
+  body('content').notEmpty().withMessage('O conteúdo é obrigatório'),
+  body('author').notEmpty().withMessage('O autor é obrigatório')
+];
+
+// Middleware para verificar os erros de validação
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
 
 // GET /posts - Listar todos os posts
 router.get('/', async (req, res) => {
@@ -12,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /posts/:id - Buscar um post por ID
+// GET /posts/:id - Buscar post por ID
 router.get('/:id', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -23,8 +40,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /posts - Criar um novo post
-router.post('/', async (req, res) => {
+// POST /posts - Criar novo post (com validação)
+router.post('/', postValidationRules, validate, async (req, res) => {
   try {
     const { title, content, author } = req.body;
     const newPost = new Post({ title, content, author });
@@ -35,8 +52,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT /posts/:id - Atualizar um post existente
-router.put('/:id', async (req, res) => {
+// PUT /posts/:id - Atualizar post (com validação)
+router.put('/:id', postValidationRules, validate, async (req, res) => {
   try {
     const { title, content, author } = req.body;
     const updatedPost = await Post.findByIdAndUpdate(
@@ -51,7 +68,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /posts/:id - Remover um post
+// DELETE /posts/:id
 router.delete('/:id', async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);

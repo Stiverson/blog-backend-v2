@@ -14,5 +14,6 @@ app.get('/', (req, res) => {
   res.send('API Blog Backend v2.0 funcionando!');
 });
 
+
 module.exports = app;
 // só pro commit funfar

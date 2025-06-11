@@ -3,12 +3,12 @@ const swaggerDocument = {
   info: {
     title: 'Blog Backend API',
     version: '1.0.0',
-    description: 'Documentação da API de Posts para o Blog Backend v2',
+    description: 'Documentação completa da API de Posts para o Blog Backend v2',
   },
   servers: [
     {
       url: 'http://localhost:3000',
-      description: 'Servidor local',
+      description: 'Servidor Local',
     },
   ],
   paths: {
@@ -27,7 +27,14 @@ const swaggerDocument = {
               },
             },
           },
-          500: { description: 'Erro ao buscar posts' },
+          500: {
+            description: 'Erro interno ao buscar posts',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
         },
       },
       post: {
@@ -42,7 +49,22 @@ const swaggerDocument = {
         },
         responses: {
           201: { description: 'Post criado com sucesso' },
-          400: { description: 'Erro ao criar post' },
+          400: {
+            description: 'Dados inválidos para criação de post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+          500: {
+            description: 'Erro interno ao criar post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
         },
       },
     },
@@ -59,8 +81,22 @@ const swaggerDocument = {
         ],
         responses: {
           200: { description: 'Post encontrado' },
-          404: { description: 'Post não encontrado' },
-          500: { description: 'Erro ao buscar post' },
+          404: {
+            description: 'Post não encontrado',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+          500: {
+            description: 'Erro interno ao buscar post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
         },
       },
       put: {
@@ -83,8 +119,22 @@ const swaggerDocument = {
         },
         responses: {
           200: { description: 'Post atualizado com sucesso' },
-          400: { description: 'Erro ao atualizar post' },
-          404: { description: 'Post não encontrado' },
+          400: {
+            description: 'Erro ao atualizar post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+          404: {
+            description: 'Post não encontrado',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
         },
       },
       delete: {
@@ -99,8 +149,22 @@ const swaggerDocument = {
         ],
         responses: {
           200: { description: 'Post removido com sucesso' },
-          404: { description: 'Post não encontrado' },
-          500: { description: 'Erro ao deletar post' },
+          404: {
+            description: 'Post não encontrado',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+          500: {
+            description: 'Erro interno ao deletar post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
         },
       },
     },
@@ -110,22 +174,33 @@ const swaggerDocument = {
       Post: {
         type: 'object',
         properties: {
-          _id: { type: 'string' },
-          title: { type: 'string' },
-          content: { type: 'string' },
-          author: { type: 'string' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
+          _id: { type: 'string', example: '60c72b2f9b1e8c1a88e4b0e3' },
+          title: { type: 'string', example: 'Título do Post' },
+          content: { type: 'string', example: 'Conteúdo do post aqui.' },
+          author: { type: 'string', example: 'João Silva' },
+          createdAt: { type: 'string', format: 'date-time', example: '2024-06-10T12:00:00Z' },
+          updatedAt: { type: 'string', format: 'date-time', example: '2024-06-10T12:30:00Z' },
         },
       },
       PostInput: {
         type: 'object',
         properties: {
-          title: { type: 'string' },
-          content: { type: 'string' },
-          author: { type: 'string' },
+          title: { type: 'string', example: 'Título do Post' },
+          content: { type: 'string', example: 'Conteúdo do post aqui.' },
+          author: { type: 'string', example: 'João Silva' },
         },
         required: ['title', 'content', 'author'],
+      },
+      ErrorResponse: {
+        type: 'object',
+        properties: {
+          message: { type: 'string', example: 'Erro ao buscar post' },
+          errors: {
+            type: 'array',
+            items: { type: 'string' },
+            example: ['Campo title é obrigatório'],
+          },
+        },
       },
     },
   },

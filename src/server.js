@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDB = require('./config/database'); 
 const postRoutes = require('./routes/post.routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger');
@@ -17,13 +17,11 @@ app.get('/', (req, res) => {
 app.use('/posts', postRoutes);
 
 // Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: true }));
 
-// Conexão MongoDB (para testes vamos usar um if)
+// Conexão MongoDB
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Conectado ao MongoDB'))
-    .catch((err) => console.error('Erro ao conectar no MongoDB:', err));
+  connectDB(); 
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
@@ -31,4 +29,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-module.exports = app; 
+module.exports = app;

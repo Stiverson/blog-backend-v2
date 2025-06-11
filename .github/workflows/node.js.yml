@@ -1,0 +1,33 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Verificar lint (caso queira usar futuramente)
+        run: echo "Sem lint definido no projeto"
+
+      - name: Rodar testes (placeholder)
+        run: echo "Nenhum teste configurado ainda"
+
+      - name: Verificar build Docker (opcional)
+        run: docker build -t blog-api .

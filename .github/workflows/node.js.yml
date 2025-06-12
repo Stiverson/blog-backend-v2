@@ -23,11 +23,15 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Verificar lint (caso queira usar futuramente)
+      - name: Verificar lint (placeholder)
         run: echo "Sem lint definido no projeto"
 
       - name: Rodar testes (placeholder)
         run: echo "Nenhum teste configurado ainda"
 
-      - name: Verificar build Docker (opcional)
+      - name: Listar arquivos da raiz para debug (garantir Dockerfile no CI)
+        run: ls -la
+
+      - name: Build Docker image (opcional - CI local, ignora no GitHub)
+        if: ${{ false }} # impede o build real no GitHub Actions
         run: docker build -t blog-api .

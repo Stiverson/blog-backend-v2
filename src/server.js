@@ -1,12 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const path = require('path'); // 👈 Importa o módulo 'path'
 const connectDB = require('./config/database'); 
-const postRoutes = require('./routes/post.routes');
+// Conecta as rotas usando o caminho absoluto
+const postRoutes = require(path.join(__dirname, 'routes', 'post.routes')); 
+const authRoutes = require(path.join(__dirname, 'routes', 'auth.routes')); 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -15,6 +20,8 @@ app.get('/', (req, res) => {
 
 // Rotas de Post
 app.use('/posts', postRoutes);
+
+app.use('/auth', authRoutes); 
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: true }));

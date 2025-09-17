@@ -2,15 +2,16 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const Post = require('../models/Post');
+const authMiddleware = require('../middlewares/auth.middleware'); 
 
-// Validação para criar/atualizar post
+
 const postValidationRules = [
   body('title').notEmpty().withMessage('O título é obrigatório'),
   body('content').notEmpty().withMessage('O conteúdo é obrigatório'),
   body('author').notEmpty().withMessage('O autor é obrigatório')
 ];
 
-// Middleware para verificar os erros de validação
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -19,7 +20,7 @@ const validate = (req, res, next) => {
   next();
 };
 
-// GET /posts - Listar todos os posts
+
 router.get('/', async (req, res) => {
   try {
     const posts = await Post.find();
@@ -29,7 +30,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /posts/:id - Buscar post por ID
+
 router.get('/:id', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -40,8 +41,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /posts - Criar novo post (com validação)
-router.post('/', postValidationRules, validate, async (req, res) => {
+
+router.post('/', authMiddleware.protect, postValidationRules, validate, async (req, res) => {
   try {
     const { title, content, author } = req.body;
     const newPost = new Post({ title, content, author });
@@ -52,8 +53,8 @@ router.post('/', postValidationRules, validate, async (req, res) => {
   }
 });
 
-// PUT /posts/:id - Atualizar post (com validação)
-router.put('/:id', postValidationRules, validate, async (req, res) => {
+
+router.put('/:id', authMiddleware.protect, postValidationRules, validate, async (req, res) => {
   try {
     const { title, content, author } = req.body;
     const updatedPost = await Post.findByIdAndUpdate(
@@ -68,8 +69,8 @@ router.put('/:id', postValidationRules, validate, async (req, res) => {
   }
 });
 
-// DELETE /posts/:id
-router.delete('/:id', async (req, res) => {
+
+router.delete('/:id', authMiddleware.protect, async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
     if (!deletedPost) return res.status(404).json({ message: 'Post não encontrado' });

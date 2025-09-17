@@ -76,6 +76,8 @@ Swagger UI para documentação e testes:
 ### 📁 Estrutura de pastas
 
 blog-backend-v2/
+
+```
 │
 ├── .env.example
 ├── .gitignore
@@ -101,3 +103,5 @@ blog-backend-v2/
 └── .github/
 └── workflows/
 └── node.js.yml
+
+```

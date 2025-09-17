@@ -2,63 +2,78 @@
 
 Este é um projeto de API para gerenciamento de posts de um Blog para o Tech Challenge segunda fase. A aplicação é desenvolvida com Node.js, Express e MongoDB. Está configurada para rodar localmente, via Docker e possui integração contínua (CI) com GitHub Actions.
 
----
+✅ Funcionalidades
+- CRUD completo de posts (Create, Read, Update, Delete).
+- **Autenticação de Usuários**: Login com JWT para professores e alunos.
+- **Autorização**: Rotas de criação, edição e exclusão de posts protegidas.
+- Middleware global de tratamento de erros.
+- Documentação Swagger disponível em `/api-docs`.
+- Suporte a variáveis de ambiente via arquivo `.env`.
+- Configuração pronta para Docker e Docker Compose.
+- Pipeline CI configurada com GitHub Actions.
+- Arquivos sensíveis ignorados via `.gitignore`.
 
-## ✅ Funcionalidades
+### Como rodar o projeto
 
-- CRUD completo de posts (`Create`, `Read`, `Update`, `Delete`)
-- Middleware global de tratamento de erros
-- Documentação Swagger disponível em `/api-docs`
-- Suporte a variáveis de ambiente via arquivo `.env`
-- Configuração pronta para Docker e Docker Compose
-- Pipeline CI configurada com GitHub Actions
-- Arquivos sensíveis ignorados via `.gitignore`
+1.  **Clonar o repositório**
+    ```bash
+    git clone [https://github.com/Stiverson/blog-backend-v2.git](https://github.com/Stiverson/blog-backend-v2.git)
+    cd blog-backend-v2
+    ```
 
----
+2.  **Configurar variáveis de ambiente**
+    Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis. A `JWT_SECRET` deve ser uma string longa e aleatória para segurança.
+    ```bash
+    PORT=3000
+    MONGODB_URI=mongodb://mongo:27017/blog
+    JWT_SECRET=sua_chave_secreta_aqui
+    ```
 
-##  Como rodar o projeto
+3.  **Rodar a aplicação via Docker (recomendado)**
+    É necessário ter Docker e Docker Compose instalados.
+    ```bash
+    docker-compose up --build -d
+    ```
+    Isso iniciará o servidor e o banco de dados.
 
-### 1. Clonar o repositório
+4.  **Popular o banco com dados de exemplo (seeder)**
+    Para criar posts e usuários de teste (professor e aluno), use o seeder a partir do contêiner:
+    ```bash
+    docker-compose run --rm backend node seed.js
+    ```
 
-```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd blog-backend-v2
+    - **Credenciais de Teste**:
+      - **Professor**: `professor@alfa.com` / `senha123`
+      - **Aluno**: `aluno@alfa.com` / `senha123`
 
-2. Configurar variáveis de ambiente
-Copie o arquivo exemplo para .env e edite se necessário:
+### Endpoints da API
 
-cp .env.example .env
+- **API de Posts**:
+  - `GET /posts`: Listar todos os posts (acesso público).
+  - `GET /posts/:id`: Buscar post por ID (acesso público).
+  - `POST /posts`: Criar novo post (**protegido**).
+  - `PUT /posts/:id`: Atualizar post (**protegido**).
+  - `DELETE /posts/:id`: Deletar post (**protegido**).
+- **API de Autenticação**:
+  - `POST /auth/login`: Autenticar e obter um token JWT.
 
-Conteúdo padrão do .env:
-
-PORT=3000
-MONGODB_URI=mongodb://mongo:27017/blog
-
-3. Rodar a aplicação via Docker (recomendado)
-
-É necessário ter Docker e Docker Compose instalados.
-
-docker-compose up --build -d
-
-Para popular o banco com dados de exemplo (seed):
-
-docker exec -it blog-api npm run seed
 A API estará disponível em:
-http://localhost:3000/posts
+`http://localhost:3000/posts`
 
 Swagger UI para documentação e testes:
-http://localhost:3000/api-docs
+`http://localhost:3000/api-docs`
 
-4. Rodar localmente sem Docker
+### 🔗 Tecnologias utilizadas
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JSON Web Token (JWT)
+- Swagger (OpenAPI)
+- Docker & Docker Compose
+- GitHub Actions (CI/CD)
 
-npm install
-npm run dev
-
-5. Testes com GitHub Actions
-
-A pipeline roda automaticamente em pushes ou pull requests na branch main.
-
-📁 Estrutura de pastas
+### 📁 Estrutura de pastas
 
 blog-backend-v2/
 │
@@ -70,31 +85,19 @@ blog-backend-v2/
 ├── server.js
 ├── swagger.js
 ├── /config
-│   └── db.js
+│   └── database.js
 ├── /controllers
-│   └── postController.js
+│   ├── auth.controller.js
+│   └── post.controller.js
 ├── /models
-│   └── Post.js
+│   ├── Post.js
+│   └── User.js
 ├── /routes
-│   └── postRoutes.js
-├── /middleware
-│   └── errorHandler.js
+│   ├── auth.routes.js
+│   └── post.routes.js
+├── /middlewares
+│   └── auth.middleware.js
+├── /tests
 └── .github/
-    └── workflows/
-        └── node.js.yml
-🔗 Tecnologias utilizadas
-
-Node.js
-
-Express
-
-MongoDB
-
-Mongoose
-
-Swagger (OpenAPI)
-
-Docker & Docker Compose
-
-GitHub Actions (CI/CD)
-
+└── workflows/
+└── node.js.yml

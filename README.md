@@ -13,6 +13,14 @@ Este é um projeto de API para gerenciamento de posts de um Blog para o Tech Cha
 - Pipeline CI configurada com GitHub Actions.
 - Arquivos sensíveis ignorados via `.gitignore`.
 
+---
+
+### Dependência do Frontend
+Este backend faz parte de uma aplicação completa. Para uma experiência completa, é necessário que o frontend correspondente esteja em execução. Você pode encontrar o repositório do frontend em:
+**[https://github.com/Gabriel300p/challenge-3-centro-educacional-alfa](https://github.com/Gabriel300p/challenge-3-centro-educacional-alfa)**
+
+---
+
 ### Como rodar o projeto
 
 1.  **Clonar o repositório**
@@ -41,7 +49,6 @@ Este é um projeto de API para gerenciamento de posts de um Blog para o Tech Cha
     ```bash
     docker-compose run --rm backend node seed.js
     ```
-
     - **Credenciais de Teste**:
       - **Professor**: `professor@alfa.com` / `senha123`
       - **Aluno**: `aluno@alfa.com` / `senha123`
@@ -62,6 +69,8 @@ A API estará disponível em:
 
 Swagger UI para documentação e testes:
 `http://localhost:3000/api-docs`
+
+---
 
 ### 🔗 Tecnologias utilizadas
 - Node.js

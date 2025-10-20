@@ -9,7 +9,7 @@ services:
     build: .
     container_name: blog-api
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - mongo
     volumes:

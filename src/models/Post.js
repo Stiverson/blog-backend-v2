@@ -10,6 +10,12 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  tipo: { 
+        type: String, 
+        required: true,
+        enum: ['Comunicado', 'Aviso', 'Outros'],
+        default: 'Comunicado'
+    },
   author: {
     type: String,
     required: true,

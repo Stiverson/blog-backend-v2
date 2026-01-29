@@ -1,17 +1,19 @@
-# Blog Backend API v2
+# Blog Backend API v2 - Fase 5 (Hackathon)
 
-Este é um projeto de API para gerenciamento de posts de um Blog para o Tech Challenge segunda fase. A aplicação é desenvolvida com Node.js, Express e MongoDB. Está configurada para rodar localmente, via Docker e possui integração contínua (CI) com GitHub Actions.
+Blog Backend API v2 - Fase 5 (Hackathon)
+Este projeto foi evoluído para uma arquitetura de Microserviços para atender aos requisitos da Fase 5 e do Hackathon. A aplicação foca na gestão educacional, introduzindo um sistema de Confirmação de Presença Digital para auxiliar professores. Desenvolvido com Node.js, Express e MongoDB, utiliza Docker para orquestração e GitHub Actions para CI.
 
 ✅ Funcionalidades
-- CRUD completo de posts (Create, Read, Update, Delete).
-- **Autenticação de Usuários**: Login com JWT para professores e alunos.
-- **Autorização**: Rotas de criação, edição e exclusão de posts protegidas.
-- Middleware global de tratamento de erros.
-- Documentação Swagger disponível em `/api-docs`.
-- Suporte a variáveis de ambiente via arquivo `.env`.
-- Configuração pronta para Docker e Docker Compose.
-- Pipeline CI configurada com GitHub Actions.
-- Arquivos sensíveis ignorados via `.gitignore`.
+
+- Gestão de Presença (Novo): CRUD para registro e histórico de chamadas digitais.
+
+- Arquitetura de Microserviços: Separação de domínios (Auth/Blog e Attendance) em containers independentes.
+
+- Autenticação Centralizada: Login via JWT compartilhado entre os serviços.
+
+- CRUD de Posts: Gerenciamento completo de conteúdos do blog.
+
+- Configuração Cloud Ready: Pronto para deploy escalável via Docker Compose.
 
 ---
 
@@ -64,6 +66,11 @@ Este backend faz parte de uma aplicação completa. Para uma experiência comple
 - **API de Autenticação**:
   - `POST /auth/login`: Autenticar e obter um token JWT.
 
+- Serviço	Porta Externa	Descrição
+- Auth/Blog (Core)	3002	Login e Gerenciamento de Posts
+- Attendance	3003	Registro e Histórico de Presença
+- MongoDB	27017	Banco de dados compartilhado
+
 A API estará disponível em:
 `http://localhost:3000/posts`
 
@@ -112,5 +119,20 @@ blog-backend-v2/
 └── .github/
 └── workflows/
 └── node.js.yml
+
+blog-backend-v2/
+├── docker-compose.yml (Configurado com 2 microserviços)
+├── seed.js (Atualizado para Fase 5)
+├── /src
+│   ├── /controllers
+│   │   ├── attendance.controller.js  <-- Novo
+│   │   └── ...
+│   ├── /models
+│   │   ├── Attendance.js             <-- Novo
+│   │   └── ...
+│   ├── /routes
+│   │   ├── attendance.routes.js     <-- Novo
+│   │   └── ...
+│   └── server.js
 
 ```

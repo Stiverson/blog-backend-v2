@@ -1,15 +1,35 @@
 version: '3.8'
+
 services:
+  # Banco de Dados MongoDB
   mongo:
     image: mongo
     container_name: mongodb-blog
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-data:/data/db
-  backend:
+
+  # Microserviço 1: Core (Autenticação e Blog)
+  backend-core:
     build: .
-    container_name: blog-api
+    container_name: blog-api-core
     ports:
-      - "3001:3000"
+      - "3002:3000" # Acessível em http://localhost:3002
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command: npm run dev
+
+  # Microserviço 2: Attendance (Gestão de Presença)
+  backend-attendance:
+    build: .
+    container_name: blog-api-attendance
+    ports:
+      - "3003:3000" # Acessível em http://localhost:3003
     depends_on:
       - mongo
     volumes:

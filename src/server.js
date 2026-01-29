@@ -9,6 +9,7 @@ const authRoutes = require(path.join(__dirname, 'routes', 'auth.routes'));
 const userRoutes = require (path.join(__dirname, 'routes', 'user.routes'));
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger');
+const attendanceRoutes = require('./routes/attendance.routes');
 
 const app = express();
 
@@ -29,6 +30,8 @@ app.use('/users', userRoutes);
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: true }));
+
+app.use('/api/attendance', attendanceRoutes);
 
 // Conexão MongoDB
 if (process.env.NODE_ENV !== 'test') {

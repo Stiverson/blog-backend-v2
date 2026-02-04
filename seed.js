@@ -4,22 +4,8 @@ const Post = require('./src/models/Post');
 const User = require('./src/models/User'); 
 const Attendance = require('./src/models/Attendance');
 
-const posts = [
-  {
-    title: 'Primeiro post de exemplo',
-    content: 'Este é o conteúdo do primeiro post de exemplo.',
-    author: 'Admin'
-  },
-  {
-    title: 'Segundo post de exemplo',
-    content: 'Conteúdo do segundo post para popular o banco.',
-    author: 'Admin'
-  }
-];
-
 const seedDB = async () => {
   try {
-    // Usando MONGO_URI 
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Conectado ao MongoDB para seed');
 
@@ -27,45 +13,50 @@ const seedDB = async () => {
     await Post.deleteMany({});
     await User.deleteMany({}); 
     await Attendance.deleteMany({});
-    console.log('Dados antigos removidos (Posts, Usuários e Presenças)');
+    console.log('Dados antigos removidos');
 
-    // Inserção de Posts (Fase anteriores)
-    await Post.insertMany(posts);
-    console.log('Posts de exemplo inseridos');
-
-    // Criação do Professor
+    // Criação do Professor (Alberto - conforme Figma)
     const professor = new User({
       email: 'professor@alfa.com',
       password: 'senha123', 
       role: 'professor'
     });
     await professor.save();
-    console.log('Usuário Professor criado.');
 
-    // Criação do Aluno
+    // Criação do Aluno (João Silva)
     const aluno = new User({
       email: 'aluno@alfa.com',
       password: 'senha123', 
       role: 'aluno'
     });
     await aluno.save();
-    console.log('Usuário Aluno criado.');
+    console.log('Usuários Professor e Aluno criados.');
 
-    // NOVO: Registro de Presença (Fase 5 - Hackathon)
+    // DEFINIÇÃO DO HORÁRIO PARA TESTE
+    // Vamos simular que a aula começou há 20 minutos atrás
+    const horarioInicio = new Date();
+    horarioInicio.setMinutes(horarioInicio.getMinutes() - 20);
+
+    // Registro de Presença (Fase 5 - Hackathon) com as NOVAS REGRAS
     const chamadaExemplo = new Attendance({
       subject: 'Desenvolvimento Full Stack',
       teacherId: professor._id,
       date: new Date(),
+      startTime: horarioInicio, // Início da aula (há 20 min)
+      toleranceMinutes: 15,      // Tolerância de 15 min
+      recurrence: 'Semanal',     // Exemplo de recorrência semanal
       students: [
         { 
           studentId: aluno._id, 
-          name: 'Aluno Exemplo', 
-          status: 'Presente' 
+          name: 'João Silva', 
+          status: 'Presente',
+          checkInTime: horarioInicio // Ele chegou exatamente na hora
         }
       ]
     });
+
     await chamadaExemplo.save();
-    console.log('Registro de Presença inicial criado com sucesso!');
+    console.log('Registro de Presença (Fase 5) criado com Tolerância e Recorrência!');
     
     mongoose.connection.close();
     console.log('Conexão fechada.');

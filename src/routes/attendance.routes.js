@@ -12,5 +12,6 @@ console.log('Função de proteção carregada:', protect);
 
 router.post('/', protect, attendanceController.createAttendance);
 router.get('/history', protect, attendanceController.getTeacherHistory);
+router.patch('/:attendanceId/checkin', protect, attendanceController.recordCheckIn);
 
 module.exports = router;

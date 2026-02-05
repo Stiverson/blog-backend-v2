@@ -7,12 +7,26 @@ const AttendanceSchema = new mongoose.Schema({
   
  
   startTime: { type: Date, required: true }, 
+  endTime: { type: Date }, 
   toleranceMinutes: { type: Number, default: 15 }, 
   recurrence: { 
     type: String, 
     enum: ['Única', 'Semanal', 'Mensal'], 
     default: 'Única' 
   },
+
+  contentAborted: { type: String, default: "" }, 
+  professorNotes: { type: String, default: "" },
+  tokenQRCode: { type: String }, 
+  status: { 
+    type: String, 
+    enum: ['aguardando', 'em_andamento', 'finalizada'], 
+    default: 'aguardando' 
+  },
+
+ 
+  actualStartTime: { type: Date }, 
+  actualEndTime: { type: Date },
 
   students: [{
     studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

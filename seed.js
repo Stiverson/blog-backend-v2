@@ -15,7 +15,7 @@ const seedDB = async () => {
     await Attendance.deleteMany({});
     console.log('Dados antigos removidos');
 
-    // Criação do Professor (Alberto - seguindo o  Figma)
+    // 1. Criação do Professor (Alberto - conforme Figma)
     const professor = new User({
       email: 'professor@alfa.com',
       password: 'senha123', 
@@ -23,52 +23,45 @@ const seedDB = async () => {
     });
     await professor.save();
 
-    // Criação do Aluno (João Silva)
-    const aluno = new User({
-      email: 'aluno@alfa.com',
-      password: 'senha123', 
-      role: 'aluno'
-    });
-    await aluno.save();
-    console.log('Usuários Professor e Aluno criados.');
+    // 2. Criação de múltiplos Alunos para testar a nova funcionalidade
+    const alunosParaCriar = [
+      { email: 'aluno@alfa.com', password: 'senha123', role: 'aluno' },
+      { email: 'maria.aluna@alfa.com', password: 'senha123', role: 'aluno' },
+      { email: 'pedro.dev@alfa.com', password: 'senha123', role: 'aluno' }
+    ];
+    
+    const alunosCriados = await User.insertMany(alunosParaCriar);
+    console.log(`${alunosCriados.length} Alunos criados na base.`);
 
-    // DEFINIÇÃO DOS HORÁRIOS PARA TESTE
+    // 3. Mimetizando a lógica do novo Controller: Vincular todos os alunos automaticamente
+    const studentsList = alunosCriados.map(s => ({
+      studentId: s._id,
+      name: s.email.split('@')[0],
+      status: 'Ausente'
+    }));
+
     const agora = new Date();
-    
-    // Simula que a aula começou há 20 minutos atrás (para testar o atraso de 15min)
-    const horarioInicio = new Date(agora.getTime() - 20 * 60000);
-    
-    // Simula que a aula termina daqui a 40 minutos
+    const horarioInicio = new Date(agora.getTime() - 20 * 60000); // Há 20 min
     const horarioFim = new Date(agora.getTime() + 40 * 60000);
 
-    // Registro de Presença (Fase 5 - Hackathon) com as NOVAS REGRAS
     const chamadaExemplo = new Attendance({
       subject: 'Desenvolvimento Full Stack',
       teacherId: professor._id,
       date: agora,
-      startTime: horarioInicio,      // Planejado para começar há 20 min
-      endTime: horarioFim,          // Planejado para terminar em 40 min
-      toleranceMinutes: 15,         // Tolerância de 15 min
-      recurrence: 'Semanal',        // Exemplo de recorrência semanal
-      
-      
-      status: 'em_andamento',       // Já inicia ativa para permitir o check-in do aluno
+      startTime: horarioInicio,
+      endTime: horarioFim,
+      toleranceMinutes: 15,
+      recurrence: 'Semanal',
+      status: 'em_andamento', // Já inicia ativa para testes
       contentAborted: 'Arquitetura de Microserviços e Docker',
       professorNotes: 'Aula prática sobre endpoints e comunicação entre serviços.',
-      tokenQRCode: 'TOKEN_HACKATHON_2026',
-      actualStartTime: horarioInicio, // Simulando que o professor deu "play" na hora certa
-
-      students: [
-        { 
-          studentId: aluno._id, 
-          name: 'João Silva', 
-          status: 'Ausente' // Aluno começa como ausente no seed para você realizar o check-in
-        }
-      ]
+      tokenQRCode: 'TOKEN_SEED_2026', // Token inicial dinâmico
+      actualStartTime: horarioInicio,
+      students: studentsList // Lista populada automaticamente com todos os alunos
     });
 
     await chamadaExemplo.save();
-    console.log('Registro de Presença (Fase 5) atualizado com Status, Conteúdo e QR Code!');
+    console.log('Seeder Finalizado: Aula criada com TODOS os alunos da base!');
     
     mongoose.connection.close();
     console.log('Conexão fechada.');

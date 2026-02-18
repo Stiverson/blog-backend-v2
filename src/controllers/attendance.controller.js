@@ -31,7 +31,12 @@ exports.createAttendance = async (req, res) => {
 // Histórico do Professor
 exports.getTeacherHistory = async (req, res) => {
     try {
-        const history = await Attendance.find({ teacherId: req.user.id });
+        const isProfessorOrAdmin = req.user.role === 'professor' || req.user.role === 'admin';
+        const query = isProfessorOrAdmin
+            ? { teacherId: req.user.id }
+            : { "students.studentId": req.user.id };
+
+        const history = await Attendance.find(query).sort({ startTime: 1 });
         res.json(history);
     } catch (error) {
         res.status(500).json({ message: "Erro ao buscar histórico" });

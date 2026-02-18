@@ -30,7 +30,12 @@ const seedDB = async () => {
       { email: 'pedro.dev@alfa.com', password: 'senha123', role: 'aluno' }
     ];
     
-    const alunosCriados = await User.insertMany(alunosParaCriar);
+    const alunosCriados = [];
+    for (const alunoData of alunosParaCriar) {
+      const aluno = new User(alunoData);
+      await aluno.save();
+      alunosCriados.push(aluno);
+    }
     console.log(`${alunosCriados.length} Alunos criados na base.`);
 
     // 3. Mimetizando a lógica do novo Controller: Vincular todos os alunos automaticamente

@@ -36,6 +36,7 @@ const seedDB = async () => {
       await aluno.save();
       alunosCriados.push(aluno);
     }
+    
     console.log(`${alunosCriados.length} Alunos criados na base.`);
 
     // 3. Mimetizando a lógica do novo Controller: Vincular todos os alunos automaticamente
